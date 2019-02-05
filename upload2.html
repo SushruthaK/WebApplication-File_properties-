@@ -1,0 +1,121 @@
+<html>
+   <head>
+	   <title>WELCOME TO MY WEBSITE</title>
+	   <link rel="atylesheet" href="{{ url_for('static', filename='/home/ubuntu/flaskapp/static/style.css') }}">
+           <style>
+                 /*****************************************
+  upload button styles
+******************************************/
+.file-upload {
+	position: relative;
+	display: inline-block;
+}
+
+.file-upload__label {
+  display: block;
+  padding: 1em 2em;
+  color: #fff;
+  background: #222;
+  border-radius: .2em;
+  transition: background .3s;
+  
+  &:hover {
+     cursor: pointer;
+     background: #000;
+  }
+}
+    
+.file-upload__input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 1;
+    width:0;
+    height: 100%;
+    opacity: 0;
+    color: #fff;
+    background: #222;
+	     
+    &:hover {
+     cursor: pointer;
+     background: #000;
+  }
+
+}
+
+/*****************************************
+ design styles
+******************************************/
+html {
+   font-family: 'helvetica neue', 'arial', sans-serif;
+   font-size: 14px;
+   font-weight: bold;
+   padding-top: 3em;
+   -webkit-font-smoothing: antialiased;
+   text-align: center;
+   background: #EE4F47;
+}
+		 table, th, td {
+    border: 1px solid black;
+}
+a:link {
+color: #fff;
+text-align: center;
+}
+a:visited {
+color: #999999;
+}
+a:hover {
+color: #fff;
+
+
+           </style>
+   </head>
+   <body >
+   
+      <form method = "POST"  enctype = "multipart/form-data">
+	      <h1><strong><center>Please upload your files</center></strong></h1>
+	      <div class="file-upload">
+	      <label for="upload" class="file-upload__label">choose a file</label>
+	    <input type = "file" name = "file" accept = ".jpg,.png,.gif,.pdf"/>
+	    <input type = "submit" id="upload" onclick="javascript: form.action='{{ url_for('uploader') }}';" name="upload" value="upload" />
+	    <h3>click to perform the specified actions</h3>
+	    <input type = "submit" id="properties" onclick="javascript: form.action='{{ url_for('properties',filename=files) }}';"  name="properties" value="properties"/>
+            <input type = "submit" onclick="javascript: form.action='{{ url_for('deletefile',filename=files) }}';"  name="delete" value="delete" />
+	    <input type = "submit" onclick="javascript: form.action='{{ url_for('view') }}';"  name="view" value="View Uploaded files" />
+	      
+      </form>
+
+      {% with messages = get_flashed_messages() %} 
+	<script>
+	       var mesg = {{ messages | safe }};
+                for (var i=0;i<mesg.length;i++)
+	        {
+			alert(mesg[i]);
+		}
+	       
+        </script>
+      {% endwith %}
+     
+      <a href="{{ url_for('uploaded',filename=files) }}" target="popup" >{{ files }}</a></li>
+	    <table >
+		    {% for props in prop %}
+		    <tr>
+			    <td> {{ props }}</td>  <td> {{ prop[props] }} </td><br>
+		    </tr>
+     {% endfor %}
+	    </table>
+    </p>
+    <table>
+	    <tr>
+     {% for f in view %}
+     <a href="{{ url_for('uploaded',filename=f) }}" target = "popup" oncick="window.open('{{url_for('uploaded',filename=f)}}','popup','width = 600,height = 600');return false;">{{ f }}</a>
+     <br>  </tr>
+     {% endfor %}
+    </table>
+
+     </div>
+   </body>
+</html>
